@@ -14,15 +14,34 @@ void DieWithError(char *errorMessage){
 void common(int sock){
 	char buf[BUF_SIZE];
 	int len_r;
+	while((len_r=recv(sock,buf,BUF_SIZE,0))>0){
+		buf[len_r]=!'\0';
+		
+		printf("%\n",buf);
+		
+		if(strstr(buf,"\r\n\r\n")){
+			
+			break;
+		}
+	}
 	len_r=recv(sock,buf,BUF_SIZE,0);
 		if (len_r<=0){
 			DieWithError("recv()failed");
+			printf("received HTTP Request",\n);
+			sprint(respones,"HTTP/1.1 200 OK\r\n");
+			if(send(sock,response,strlen(response),0)!=strlen(response)){
+			DiewithError("send()sent a message of unexpected bytes");
+			}
+		
 		}
+	
 	buf[len_r]= '\0';
 	printf("%s\n",buf);
 	if (send(sock,buf,strlen(buf),0) != strlen(buf)){
 			DieWithError("send()sent a message of unexpected bytes");
-		}
+		
+	}
+		
 }
 
 
@@ -44,6 +63,7 @@ int main(int argc, char **argv){
 	while(1){
 		szClientAddr=sizeof(clientAddress);
 		cliSock=accept(servSock,(struct sockaddr*)&clientAddress,&szClientAddr);
+		
 		common(cliSock);
 		
 		close(cliSock);
