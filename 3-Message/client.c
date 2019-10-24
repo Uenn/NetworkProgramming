@@ -104,7 +104,7 @@ void commun(int sock)
     //　受信処理
     read_until_delim(sock, msg, '_', BUF_SIZE);
     //　表示処理
-    prinutf("残高は%d円になりました", atoi(msg));
+    printf("残高は%d円になりました", atoi(msg));
 }
 
 void read_until_delim(int sock, char *buf, char delimiter, int max_length)
